@@ -1,0 +1,30 @@
+name: MobCapture
+version: ${project.version}
+main: at.valentinerinferno.mobcapture.MobCapture
+api-version: 1.13
+authors: [Flotares]
+description: Plugin that allows players to capture mobs
+website: valentinerinferno.at
+commands:
+  catcher:
+    description: Give the player the catcher item
+    usage: /<command>
+permissions:
+  mobcapture.*:
+    children:
+      mobcapture.passive: true
+      mobcapture.neutral: true
+      mobcapture.hostile: true
+      mobcapture.give.catcher: true
+  mobcapture.passive:
+    description: Allows the player to capture Passive Mobs
+    default: op
+  mobcapture.neutral:
+    description: Allows the player to capture Neutral Mobs
+    default: op
+  mobcapture.hostile:
+    description: Allows the player to capture Hostile Mobs
+    default: op
+  mobcapture.give.catcher:
+    description: Allows the player to get the catcher item with a command
+    default: op
