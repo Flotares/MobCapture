@@ -3,10 +3,9 @@ A Minecraft Plugin to capture Entities
 
 ## Setup:
 1. Download the .jar file
-2. Download [Vault](https://dev.bukkit.org/projects/vault)
-3. Download a permission plugin which uses Vault
-4. Drag *CustomJLMessage-1.0.jar*, *Vault.jar* and *the permission plugins' .jar* into your plugins folder
-5. Reload the server
+2. Drag *MobCapture* into your plugins folder
+3. Reload the server  
+
 ## Commands:
 * /catcher  
     * Spawns a catcher in the players inventory
