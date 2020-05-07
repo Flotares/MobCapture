@@ -3,7 +3,8 @@ A Minecraft Plugin to capture Entities
 
 ## Setup:
 1. Download the .jar file
-2. Drag *MobCapture* into your plugins folder
+2. Drag *MobCapture.jar* into your plugins folder
+2.1 Configure the *config.yml* file according to your ideas
 3. Reload the server  
 
 ## Commands:
