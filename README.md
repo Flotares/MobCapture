@@ -8,8 +8,8 @@ A Minecraft Plugin to capture Entities
 4. Drag *CustomJLMessage-1.0.jar*, *Vault.jar* and *the permission plugins' .jar* into your plugins folder
 5. Reload the server
 ## Commands:
-* /catcher
-    *Spawns a catcher in the players inventory
+* /catcher  
+    * Spawns a catcher in the players inventory
 ## Permissions
 * mobcapture.*
     * Grants all permissions
