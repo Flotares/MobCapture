@@ -34,11 +34,11 @@ public class PlayerInteractEntity implements Listener {
     public void onPlayerEntityInteract(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
-        ItemStack spawnegg = new ItemStack(Objects.requireNonNull(getSpawnEggFromEntity(entity)));
-        Objects.requireNonNull(spawnegg.getItemMeta()).setDisplayName("&bCaptured " + entity.getName());
+        ItemStack spawnegg = new ItemStack(getSpawnEggFromEntity(entity));
+        spawnegg.getItemMeta().setDisplayName("&bCaptured " + entity.getName());
         ItemStack captureItem = new ItemStack(Material.STICK);
         ItemMeta itemMeta = captureItem.getItemMeta();
-        Objects.requireNonNull(itemMeta).setLore(catcherLore);
+        itemMeta.setLore(catcherLore);
         itemMeta.setDisplayName(catcherName);
         captureItem.setItemMeta(itemMeta);
 
@@ -89,7 +89,7 @@ public class PlayerInteractEntity implements Listener {
         e.remove();
         p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
 
-        Objects.requireNonNull(p.getLocation().getWorld()).playEffect(e.getLocation(), Effect.ENDER_SIGNAL, 1);
+        p.getLocation().getWorld().playEffect(e.getLocation(), Effect.ENDER_SIGNAL, 1);
 
     }
 

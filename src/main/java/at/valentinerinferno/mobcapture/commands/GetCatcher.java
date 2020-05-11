@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class GetCatcher implements CommandExecutor {
 
@@ -28,7 +27,7 @@ public class GetCatcher implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         ItemStack catcherItem = new ItemStack(Material.STICK);
         ItemMeta itemMeta = catcherItem.getItemMeta();
-        Objects.requireNonNull(itemMeta).setDisplayName(catcherName);
+        itemMeta.setDisplayName(catcherName);
         itemMeta.setLore(catcherLore);
         catcherItem.setItemMeta(itemMeta);
 
