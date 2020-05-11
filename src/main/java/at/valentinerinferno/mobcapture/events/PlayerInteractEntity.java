@@ -34,8 +34,12 @@ public class PlayerInteractEntity implements Listener {
     public void onPlayerEntityInteract(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
+
         ItemStack spawnegg = new ItemStack(getSpawnEggFromEntity(entity));
-        spawnegg.getItemMeta().setDisplayName("&bCaptured " + entity.getName());
+        ItemMeta spawnMeta = spawnegg.getItemMeta();
+        spawnMeta.setDisplayName(ChatColor.AQUA + "Captured " + entity.getName());
+        spawnegg.setItemMeta(spawnMeta);
+
         ItemStack captureItem = new ItemStack(Material.STICK);
         ItemMeta itemMeta = captureItem.getItemMeta();
         itemMeta.setLore(catcherLore);
@@ -44,43 +48,48 @@ public class PlayerInteractEntity implements Listener {
 
         //Difference between left and right click
         if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
-            //If the player has the same item with the same name in the hand which is set in the config
+            //if the the main hand isn't null which means if the player holds some item
+            if(player.getInventory().getItemInMainHand() != null){
+                //If the player has the same item with the same name in the hand which is set in the config
+                if (player.getInventory().getItemInMainHand().isSimilar(captureItem)
+                        && player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(catcherName)
+                        && player.getInventory().getItemInMainHand().getItemMeta().getLore().equals(catcherLore)) {
 
-            if (player.getInventory().getItemInMainHand().isSimilar(captureItem) /*&& player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(catcherName) && player.getInventory().getItemInMainHand().getItemMeta().getLore().equals(catcherLore)*/) {
-                player.getInventory().removeItem(captureItem);
+                    player.getInventory().removeItem(captureItem);
 
-                if (Util.isPassive(entity)) {
-                    if (player.hasPermission("mobcapture.passive")) {
-                        if (mobs.contains(entity.getName().toLowerCase())) {
-                            player.getInventory().addItem(spawnegg);
-                            player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                    if (Util.isPassive(entity)) {
+                        if (player.hasPermission("mobcapture.passive")) {
+                            if (mobs.contains(entity.getName().toLowerCase())) {
+                                player.getInventory().addItem(spawnegg);
+                                player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                            }
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You don't have permission!");
                         }
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You don't have permission!");
-                    }
-                } else if (Util.isNeutral(entity)) {
-                    if (player.hasPermission("mobcapture.neutral")) {
-                        if (mobs.contains(entity.getName().toLowerCase())) {
-                            player.getInventory().addItem(spawnegg);
-                            player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                    } else if (Util.isNeutral(entity)) {
+                        if (player.hasPermission("mobcapture.neutral")) {
+                            if (mobs.contains(entity.getName().toLowerCase())) {
+                                player.getInventory().addItem(spawnegg);
+                                player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                            }
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You don't have permission!");
                         }
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You don't have permission!");
-                    }
-                } else if (Util.isHostile(entity)) {
-                    if (player.hasPermission("mobcapture.hostile")) {
-                        if (mobs.contains(entity.getName().toLowerCase())) {
-                            player.getInventory().addItem(spawnegg);
-                            player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                    } else if (Util.isHostile(entity)) {
+                        if (player.hasPermission("mobcapture.hostile")) {
+                            if (mobs.contains(entity.getName().toLowerCase())) {
+                                player.getInventory().addItem(spawnegg);
+                                player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
+                            }
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You don't have permission!");
                         }
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You don't have permission!");
                     }
+                    makeEntitiyDisappear(entity, player);
+
+                } else {
+                    player.sendMessage(ChatColor.GRAY + "Wrong item");
                 }
-                makeEntitiyDisappear(entity, player);
-
-            } else {
-                player.sendMessage(ChatColor.GRAY + "Wrong item");
             }
         }
     }
