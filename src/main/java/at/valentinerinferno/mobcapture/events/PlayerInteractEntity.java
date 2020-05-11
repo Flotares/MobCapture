@@ -34,22 +34,24 @@ public class PlayerInteractEntity implements Listener {
     public void onPlayerEntityInteract(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
+        ItemStack spawnegg;
 
-        ItemStack spawnegg = new ItemStack(getSpawnEggFromEntity(entity));
-        ItemMeta spawnMeta = spawnegg.getItemMeta();
-        spawnMeta.setDisplayName(ChatColor.AQUA + "Captured " + entity.getName());
-        spawnegg.setItemMeta(spawnMeta);
+        //If there is a Spawn Egg for the entity
+        if (getSpawnEggFromEntity(entity) != null) {
+            spawnegg = new ItemStack(getSpawnEggFromEntity(entity));
+            ItemMeta spawnMeta = spawnegg.getItemMeta();
+            spawnMeta.setDisplayName(ChatColor.AQUA + "Captured " + entity.getName());
+            spawnegg.setItemMeta(spawnMeta);
 
-        ItemStack captureItem = new ItemStack(Material.STICK);
-        ItemMeta itemMeta = captureItem.getItemMeta();
-        itemMeta.setLore(catcherLore);
-        itemMeta.setDisplayName(catcherName);
-        captureItem.setItemMeta(itemMeta);
 
-        //Difference between left and right click
-        if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
-            //if the the main hand isn't null which means if the player holds some item
-            if(player.getInventory().getItemInMainHand() != null){
+            ItemStack captureItem = new ItemStack(Material.STICK);
+            ItemMeta itemMeta = captureItem.getItemMeta();
+            itemMeta.setLore(catcherLore);
+            itemMeta.setDisplayName(catcherName);
+            captureItem.setItemMeta(itemMeta);
+
+            //Difference between left and right click
+            if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
                 //If the player has the same item with the same name in the hand which is set in the config
                 if (player.getInventory().getItemInMainHand().isSimilar(captureItem)
                         && player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(catcherName)
@@ -92,6 +94,7 @@ public class PlayerInteractEntity implements Listener {
                 }
             }
         }
+
     }
 
     private void makeEntitiyDisappear(Entity e, Player p) {
