@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Objects;
+
 
 public class PlayerInteractEntity implements Listener {
 
@@ -24,17 +25,18 @@ public class PlayerInteractEntity implements Listener {
     private ArrayList<String> catcherLore;
     private ArrayList<String> mobs;
 
-    public PlayerInteractEntity(String catcherName, ArrayList catcherLore, ArrayList<String> mobs) {
+    public PlayerInteractEntity(String catcherName, ArrayList catcherLore, ArrayList mobs) {
         this.catcherName = catcherName;
         this.catcherLore = catcherLore;
         this.mobs = mobs;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEntityInteract(PlayerInteractEntityEvent e) {
         Player player = e.getPlayer();
         Entity entity = e.getRightClicked();
         ItemStack spawnegg;
+        boolean hasPermission = true;
 
         //If there is a Spawn Egg for the entity
         if (getSpawnEggFromEntity(entity) != null) {
@@ -42,7 +44,6 @@ public class PlayerInteractEntity implements Listener {
             ItemMeta spawnMeta = spawnegg.getItemMeta();
             spawnMeta.setDisplayName(ChatColor.AQUA + "Captured " + entity.getName());
             spawnegg.setItemMeta(spawnMeta);
-
 
             ItemStack captureItem = new ItemStack(Material.STICK);
             ItemMeta itemMeta = captureItem.getItemMeta();
@@ -54,8 +55,8 @@ public class PlayerInteractEntity implements Listener {
             if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
                 //If the player has the same item with the same name in the hand which is set in the config
                 if (player.getInventory().getItemInMainHand().isSimilar(captureItem)
-                        && player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(catcherName)
-                        && player.getInventory().getItemInMainHand().getItemMeta().getLore().equals(catcherLore)) {
+                 && player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(catcherName)
+                 && player.getInventory().getItemInMainHand().getItemMeta().getLore().equals(catcherLore)) {
 
                     player.getInventory().removeItem(captureItem);
 
@@ -66,7 +67,7 @@ public class PlayerInteractEntity implements Listener {
                                 player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + "You don't have permission!");
+                            hasPermission = false;
                         }
                     } else if (Util.isNeutral(entity)) {
                         if (player.hasPermission("mobcapture.neutral")) {
@@ -75,7 +76,7 @@ public class PlayerInteractEntity implements Listener {
                                 player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + "You don't have permission!");
+                            hasPermission = false;
                         }
                     } else if (Util.isHostile(entity)) {
                         if (player.hasPermission("mobcapture.hostile")) {
@@ -84,13 +85,15 @@ public class PlayerInteractEntity implements Listener {
                                 player.sendMessage(ChatColor.AQUA + "You just captured a(n): " + entity.getName());
                             }
                         } else {
-                            player.sendMessage(ChatColor.RED + "You don't have permission!");
+                            hasPermission = false;
                         }
                     }
-                    makeEntitiyDisappear(entity, player);
 
-                } else {
-                    player.sendMessage(ChatColor.GRAY + "Wrong item");
+                    if(hasPermission){
+                        makeEntitiyDisappear(entity, player);
+                    }else{
+                        player.sendMessage(ChatColor.RED + "You don't have permission to capture "+ChatColor.AQUA+entity.getName());
+                    }
                 }
             }
         }
@@ -102,7 +105,6 @@ public class PlayerInteractEntity implements Listener {
         p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
 
         p.getLocation().getWorld().playEffect(e.getLocation(), Effect.ENDER_SIGNAL, 1);
-
     }
 
     private Material getSpawnEggFromEntity(Entity e) {

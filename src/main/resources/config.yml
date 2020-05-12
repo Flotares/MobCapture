@@ -1,8 +1,7 @@
 #specify a item that can capture mobs
 #leave name blank if you want that every 'item' can capture mobs with a specific name
 name: 'Catcher'
-lore: ['This item can be used to capture animals',
-      'It can be acquired by trading with a villager']
+lore: ['This item can be used to capture animals']
 
 #mobs that can be captured
 mobs:
